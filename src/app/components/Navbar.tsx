@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Button from './ui/Button';
+import Button from './Button';
 
 export default function Navbar() {
   return (
@@ -13,7 +13,7 @@ export default function Navbar() {
 
         {/* Link */}
         <div className="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-700">
-          <Link href="/regions" className="hover:text-emerald-600 transition-colors">Régions</Link>
+          <Link href="/Region" className="hover:text-emerald-600 transition-colors">Régions</Link>
           <Link href="/themes" className="hover:text-emerald-600 transition-colors">Thématiques</Link>
           <Link href="/carte" className="hover:text-emerald-600 transition-colors">Carte Interactive</Link>
           <Link href="/blog" className="hover:text-emerald-600 transition-colors">Récits</Link>
