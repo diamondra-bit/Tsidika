@@ -12,7 +12,7 @@ export default function RegionsPage() {
 
   const zones = ['Toutes', 'Nord', 'Sud', 'Est', 'Ouest', 'Centre'];
 
-  // Logique de filtrage combinée
+  // Combined filtering logic
   const filteredRegions = regions.filter(region => {
     const matchesSearch = 
       region.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -68,7 +68,7 @@ export default function RegionsPage() {
                       <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">{region.description}</p>
                     </div>
                     <div className="mt-8 flex items-center justify-between">
-                      <Link href={`/regions/${region.slug}`} className="flex items-center gap-2 text-emerald-700 font-black text-xs uppercase tracking-widest group/link">
+                      <Link href={`/region/${region.slug}`} className="flex items-center gap-2 text-emerald-700 font-black text-xs uppercase tracking-widest group/link">
                         Voir détails <span className="group-hover/link:translate-x-1 transition-transform">→</span>
                       </Link>
                       <span className="text-4xl font-black text-slate-50 opacity-10">{region.id.toString().padStart(2, '0')}</span>

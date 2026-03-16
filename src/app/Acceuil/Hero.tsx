@@ -43,7 +43,7 @@ export default function Hero() {
           <div className="rounded-[2rem] overflow-hidden h-[28rem] shadow-2xl border-4 border-white transition-transform duration-500 hover:scale-[1.03] lg:mt-12 bg-white">
             <Image 
               src="/Home/tsingy.jpg" 
-              alt="Nosy Be" 
+              alt="Tsingy" 
               width={400} 
               height={600} 
               className="w-full h-full object-cover" 
