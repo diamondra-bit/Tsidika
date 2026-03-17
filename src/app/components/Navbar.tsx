@@ -14,10 +14,10 @@ export default function Navbar() {
         {/* Link */}
         <div className="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-700">
           <Link href="/region" className="hover:text-emerald-600 transition-colors">Régions</Link>
+           <Link href="/recits" className="hover:text-emerald-600 transition-colors">Récits</Link>      
           <Link href="/themes" className="hover:text-emerald-600 transition-colors">Thématiques</Link>
           <Link href="/carte" className="hover:text-emerald-600 transition-colors">Carte Interactive</Link>
-          <Link href="/blog" className="hover:text-emerald-600 transition-colors">Récits</Link>
-        </div>
+          </div>
 
         {/* Languages */}
         <div className="flex items-center gap-6">
