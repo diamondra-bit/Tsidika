@@ -15,8 +15,8 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-700">
           <Link href="/region" className="hover:text-emerald-600 transition-colors">Régions</Link>
            <Link href="/recits" className="hover:text-emerald-600 transition-colors">Récits</Link>      
-          <Link href="/themes" className="hover:text-emerald-600 transition-colors">Thématiques</Link>
-          <Link href="/carte" className="hover:text-emerald-600 transition-colors">Carte Interactive</Link>
+          <Link href="/themes" className="hover:text-emerald-600 transition-colors">Planifier</Link>
+          <Link href="/tsidikbook" className="hover:text-emerald-600 transition-colors">TsidikaBook </Link>
           </div>
 
         {/* Languages */}
