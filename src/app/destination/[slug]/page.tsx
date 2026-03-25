@@ -199,31 +199,33 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
         </div>
       </main>
 
-      {/* --- NEXT DESTINATION FOOTER --- */}
-     <footer className="mt-28 relative h-[80vh] w-full overflow-hidden group">
+    {/* --- NEXT DESTINATION FOOTER --- */}
+      <footer className="mt-20 relative h-[45vh] w-full overflow-hidden group cursor-pointer">
         <Image 
           src={nextDest.image} 
           alt={nextDest.name} 
           fill 
           className="object-cover transition-transform duration-[4s] group-hover:scale-110" 
         />
-        <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/20 transition-colors duration-700" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+        {/* Overlay  */}
+        <div className="absolute inset-0 bg-slate-900/50 group-hover:bg-slate-900/30 transition-colors duration-700" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60" />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6">
           <Link href={`/destination/${nextDest.slug}`} className="group/link flex flex-col items-center">
-            <div className="flex items-center gap-4 mb-8">
-              <span className="h-[1px] w-12 bg-white/30 group-hover/link:w-20 group-hover/link:bg-emerald-400 transition-all duration-500" />
-              <span className="text-white text-[11px] font-black uppercase tracking-[0.6em]">Prochaine Étape</span>
-              <span className="h-[1px] w-12 bg-white/30 group-hover/link:w-20 group-hover/link:bg-emerald-400 transition-all duration-500" />
+
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-[1px] w-8 bg-white/30 group-hover/link:w-12 group-hover/link:bg-emerald-400 transition-all duration-500" />
+              <span className="text-white text-[9px] font-black uppercase tracking-[0.4em]">Prochaine Étape</span>
+              <span className="h-[1px] w-8 bg-white/30 group-hover/link:w-12 group-hover/link:bg-emerald-400 transition-all duration-500" />
             </div>
 
-            <h2 className="text-white text-7xl md:text-[12rem] font-black uppercase tracking-tighter leading-none mb-12 transition-all duration-700 group-hover/link:scale-105">
+            <h2 className="text-white text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-8 transition-all duration-700 group-hover/link:scale-105">
               {nextDest.name}
             </h2>
 
-            <div className="w-24 h-24 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center group-hover/link:bg-emerald-600 group-hover/link:border-emerald-600 group-hover/link:scale-110 transition-all duration-500">
-              <ChevronRight className="text-white" size={32} strokeWidth={2} />
+            <div className="w-16 h-16 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center group-hover/link:bg-emerald-600 group-hover/link:border-emerald-600 group-hover/link:scale-110 transition-all duration-500">
+              <ChevronRight className="text-white" size={24} strokeWidth={2} />
             </div>
           </Link>
         </div>

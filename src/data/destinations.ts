@@ -60,7 +60,7 @@ export const destinations: Destination[] = [
     parentRegion: "Diana",
     zone: "Nord",
     description: "Surnommée l'île aux parfums, Nosy Be est une escale tropicale où l'air embaume l'ylang-ylang. Entre ses archipels satellites aux eaux cristallines et ses couchers de soleil sur le Mont Passot, c'est la destination balnéaire par excellence.",
-    image: "/images/destinations/nosy-be-main.jpg",
+    image: "/images/destinations/nosybe.jpg",
     bestTime: "Mai à Octobre",
     access: "Avion ou Bateau depuis Ankify",
     climat: "Tropical de mousson",
