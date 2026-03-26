@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import SearchBar from '../components/SearchBar';
 import CategoryFilter from '../components/CategoryFilter';
 import { recits } from '../../data/recits';
+import ExploreLink from '../components/ExploreLink';
 
 export default function RecitsPage() {
   // --- STATES ---
@@ -108,12 +109,7 @@ export default function RecitsPage() {
                   </div>
 
                   {/* Final link to explore the region */}
-                  <Link 
-                    href={`/recits/${recit.slug}`}
-                    className="mt-6 text-[10px] uppercase font-black tracking-widest border-b border-slate-900 w-fit pb-1 hover:text-emerald-600 hover:border-emerald-600 transition-all"
-                  >
-                    Découvrir l'histoire
-                  </Link>
+                   <ExploreLink href={`/recits/${recit.slug}`} label="Découvrir l'histoire"/>
                 </div>
               );
             })}

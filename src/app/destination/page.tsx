@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import SearchBar from '../components/SearchBar';
 import CategoryFilter from '../components/CategoryFilter';
 import { destinations } from '@/data/destinations';
+import ExploreLink from '../components/ExploreLink';
 
 export default function DestinationsPage() {
   // --- STATES ---
@@ -54,24 +55,28 @@ export default function DestinationsPage() {
               <div key={dest.id} className="group flex flex-col">
                 
                 {/* Image */}
-                <div className="relative aspect-[4/5] mb-8 overflow-hidden rounded-2xl shadow-sm">
-                  <Image 
-                    src={dest.image} 
-                    alt={dest.name}
-                    fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
+                <Link href={`/destination/${dest.slug}`}>
+                  <div className="relative aspect-[4/5] mb-8 overflow-hidden rounded-2xl shadow-sm">
                   
-                  {/* Badge Zone */}
-                  <div className="absolute top-6 left-6 z-10">
-                    <span className="bg-white/90 backdrop-blur-md px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-slate-900 rounded-full shadow-sm">
-                      {dest.zone}
-                    </span>
-                  </div>
+                      <Image 
+                        src={dest.image} 
+                        alt={dest.name}
+                        fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                  
+                    
+                    {/* Badge Zone */}
+                    <div className="absolute top-6 left-6 z-10">
+                      <span className="bg-white/90 backdrop-blur-md px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-slate-900 rounded-full shadow-sm">
+                        {dest.zone}
+                      </span>
+                    </div>
 
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                </div>
+                    {/* Overlay Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
+                 </Link>
 
                 {/* Text */}
                 <div className="space-y-4 flex-grow px-2">
@@ -102,17 +107,7 @@ export default function DestinationsPage() {
                 </div>
 
                 {/* Link */}
-                <Link 
-                  href={`/destination/${dest.slug}`}
-                  className="mt-8 mx-2 flex items-center justify-between py-4 border-t border-slate-100 text-[11px] uppercase font-black tracking-[0.2em] text-slate-900 group/link transition-all"
-                >
-                  <span className="group-hover/link:translate-x-1 transition-transform">
-                    Découvrir l'expérience
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover/link:bg-emerald-600 group-hover/link:text-white transition-all">
-                    <ArrowRight size={14} />
-                  </div>
-                </Link>
+                <ExploreLink href={`/destination/${dest.slug}`} label="Découvrir l'expérience"/>
               </div>
             ))}
           </div>
