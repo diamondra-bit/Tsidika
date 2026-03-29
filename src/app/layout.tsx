@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { TripProvider } from '@/context/TripContext';
 import "./globals.css";
 
 
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="fr"> 
       <body className={`font-sans antialiased`}>
-        {children}
+        <TripProvider>
+          {children}
+        </TripProvider>
       </body>
     </html>
   );

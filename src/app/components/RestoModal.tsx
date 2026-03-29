@@ -1,52 +1,29 @@
 "use client";
 
-import { X, Utensils, Star, Clock, MapPin, Plus, Check } from 'lucide-react';
+import { X, Utensils, Star, Clock, Plus, Check } from 'lucide-react';
 import { useState } from 'react';
 
-interface Restaurant {
-  name: string;
-  img: string;
-  specialite: string;
-  budgetMin: number;
-  budgetMax: number;
-  stars: number;
-  description?: string;
-}
-
-interface RestoModalProps {
-  resto: Restaurant;
-  onClose: () => void;
-  onAddToTrip: (selection: any) => void;
-}
-
-export default function RestoModal({ resto, onClose, onAddToTrip }: RestoModalProps) {
+export default function RestoModal({ resto, onClose, onAddToTrip }: any) {
   const [isAdded, setIsAdded] = useState(false);
 
-  
   const handleConfirm = () => {
     onAddToTrip({
       ...resto,
       type: 'gastronomie',
       addedAt: new Date().toISOString()
     });
-    
     setIsAdded(true);
-    
-     setTimeout(onClose, 1200);
+    setTimeout(onClose, 1200);
   };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 font-lato">
-      
       <div 
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-500" 
         onClick={onClose} 
       />
 
-      {/* --- MAIN CONTAINER --- */}
       <div className="relative bg-[#FDFCFB] w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
-        
-        {/* --- IMAGE HEADER --- */}
         <div className="relative h-56 w-full">
           <img src={resto.img} alt={resto.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCFB] via-transparent to-black/20" />
@@ -65,9 +42,7 @@ export default function RestoModal({ resto, onClose, onAddToTrip }: RestoModalPr
           </div>
         </div>
 
-        {/* --- BODY CONTENT --- */}
         <div className="p-8 md:p-10 space-y-8">
-          
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <h2 className="text-4xl font-serif italic text-slate-900 leading-tight">{resto.name}</h2>
@@ -85,7 +60,6 @@ export default function RestoModal({ resto, onClose, onAddToTrip }: RestoModalPr
             </div>
           </div>
 
-          {/* ---  Quick metadata using icons for better scannability --- */}
           <div className="grid grid-cols-2 gap-6 py-6 border-y border-slate-100">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
@@ -107,12 +81,10 @@ export default function RestoModal({ resto, onClose, onAddToTrip }: RestoModalPr
             </div>
           </div>
 
-          {/* --- DESCRIPTION --- */}
           <p className="text-slate-500 font-serif italic text-lg leading-relaxed">
-            "{resto.description || `Découvrez une cuisine authentique mettant en avant les produits locaux de la région. Un moment de partage inoubliable.`}"
+            "{resto.description || `Découvrez une cuisine authentique mettant en avant les produits locaux.`}"
           </p>
 
-          {/* --- ACTION BUTTONS --- */}
           <div className="flex gap-4 items-center pt-2">
             <button 
               onClick={handleConfirm}
@@ -120,7 +92,7 @@ export default function RestoModal({ resto, onClose, onAddToTrip }: RestoModalPr
               className={`flex-[2] py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-3 shadow-lg
                 ${isAdded 
                   ? 'bg-emerald-600 text-white' 
-                  : 'bg-slate-900 text-white hover:bg-black hover:-translate-y-1 active:scale-95'}`}
+                  : 'bg-slate-900 text-white hover:bg-black active:scale-95'}`}
             >
               {isAdded ? (
                 <><Check size={18} /> Ajouté au voyage</>

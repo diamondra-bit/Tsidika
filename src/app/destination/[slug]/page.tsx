@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from 'react';
+import { useState, use, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
@@ -17,32 +17,31 @@ import { destinations } from '../../../data/destinations';
 import { notFound } from 'next/navigation';
 
 export default function DestinationDetail({ params }: { params: Promise<{ slug: string }> }) {
-  // Extracting slug from dynamic route parameters
   const resolvedParams = use(params);
   const dest = destinations.find((d) => d.slug === resolvedParams.slug);
 
   // --- CENTRALIZED STATE MANAGEMENT ---
-  // Controls the active tab (Overview, Hotels, Restos, Activities)
   const [activeTab, setActiveTab] = useState('overview');
-  
-  // Controls which item (hotel, resto, or activity) is currently being viewed in a modal
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [itemType, setItemType] = useState<'hotel' | 'resto' | 'activity' | null>(null);
-  
-  // Stores the user's selected items for their trip (The Shopping Cart logic)
   const [tripCart, setTripCart] = useState<any[]>([]);
 
-  // Safety check: if destination slug doesn't exist, trigger 404
+  useEffect(() => {
+    const saved = localStorage.getItem('myTrip');
+    if (saved) {
+      setTripCart(JSON.parse(saved));
+    }
+  }, []);
+
   if (!dest) return notFound();
 
-  // Logic for the footer: finds the next destination in the list for a continuous loop
   const currentIndex = destinations.indexOf(dest);
   const nextDest = destinations[(currentIndex + 1) % destinations.length];
 
- 
   const handleAddToTrip = (selection: any) => {
-    setTripCart((prev) => [...prev, selection]);
-    console.log("Trip Updated:", [...tripCart, selection]);
+    const newTrip = [...tripCart, { ...selection, id: Date.now() }];
+    setTripCart(newTrip);
+    localStorage.setItem('myTrip', JSON.stringify(newTrip));
   };
 
   const tabs = [
@@ -213,7 +212,7 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
                 ))
               ) : (
                 <div className="col-span-full py-24 text-center bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200 text-slate-400 font-serif italic text-lg">
-                   Sélection en cours...
+                    Sélection en cours...
                 </div>
               )}
             </div>
@@ -254,7 +253,7 @@ export default function DestinationDetail({ params }: { params: Promise<{ slug: 
                 ))
               ) : (
                 <div className="col-span-full py-24 text-center bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200 text-slate-400 font-serif italic text-lg">
-                   L'aventure se prépare...
+                    L'aventure se prépare...
                 </div>
               )}
             </div>

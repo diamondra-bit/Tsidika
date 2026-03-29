@@ -15,7 +15,7 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-10 text-sm font-semibold text-slate-700">
           <Link href="/" className="hover:text-emerald-600 transition-colors">Acceuil</Link>      
           <Link href="/destination" className="hover:text-emerald-600 transition-colors">Destinations</Link>
-          <Link href="/themes" className="hover:text-emerald-600 transition-colors">Mon voyage</Link>
+          <Link href="/planification" className="hover:text-emerald-600 transition-colors">Mon voyage</Link>
           <Link href="/tsidikbook" className="hover:text-emerald-600 transition-colors">Communauté </Link>
           </div>
 

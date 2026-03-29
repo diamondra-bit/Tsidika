@@ -1,17 +1,19 @@
 "use client";
 
-import { X, Clock, Mountain, Map, Check, Plus, ShieldCheck } from 'lucide-react';
+import { X, Clock, Mountain, Check, Plus, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
   const [isAdded, setIsAdded] = useState(false);
 
- 
   const handleConfirm = () => {
-    onAddToTrip({ ...activity, type: 'decouverte' });
+    onAddToTrip({ 
+      ...activity, 
+      type: 'decouverte',
+      addedAt: new Date().toISOString() 
+    });
     setIsAdded(true);
-    
-     setTimeout(onClose, 1200);
+    setTimeout(onClose, 1200);
   };
 
   return (
@@ -21,10 +23,7 @@ export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
         onClick={onClose} 
       />
       
-      {/* --- MODAL CONTAINER --- */}
       <div className="relative bg-[#FDFCFB] w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-        
-        {/* --- HEADER --- */}
         <div className="relative h-64">
           <img src={activity.img} className="w-full h-full object-cover" alt={activity.title} />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCFB] via-transparent" />
@@ -37,7 +36,6 @@ export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
           </button>
         </div>
 
-        {/* --- CONTENT--- */}
         <div className="p-10 space-y-8">
           <div className="space-y-2">
             <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-600">
@@ -48,7 +46,6 @@ export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
             </h2>
           </div>
 
-          {/* --- Quick info grid (Duration and Activity Type) --- */}
           <div className="flex gap-8 border-y border-slate-100 py-6">
             <div className="flex items-center gap-3">
               <Clock className="text-emerald-600" size={18} />
@@ -60,7 +57,6 @@ export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
             </div>
           </div>
 
-          {/* --- DESCRIPTION --- */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-slate-800">
               <ShieldCheck size={18} className="text-emerald-500" />
@@ -73,7 +69,6 @@ export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
             </p>
           </div>
 
-          {/* ---  BUTTON --- */}
           <button 
             onClick={handleConfirm}
             disabled={isAdded}
