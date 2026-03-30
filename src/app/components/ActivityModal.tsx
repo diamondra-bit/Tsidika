@@ -2,86 +2,111 @@
 
 import { X, Clock, Mountain, Check, Plus, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
+import { useTrip } from '@/context/TripContext';
 
-export default function ActivityModal({ activity, onClose, onAddToTrip }: any) {
+export default function ActivityModal({ activity, onClose }: any) {
+  const { addToTrip } = useTrip();
   const [isAdded, setIsAdded] = useState(false);
 
   const handleConfirm = () => {
-    onAddToTrip({ 
-      ...activity, 
+    addToTrip({ 
+      ...activity,
+      cartId: `activity-${activity.id}-${Date.now()}`,
+      name: activity.title,
       type: 'decouverte',
-      addedAt: new Date().toISOString() 
+      totalPrice: 0 
     });
+    
     setIsAdded(true);
     setTimeout(onClose, 1200);
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" 
-        onClick={onClose} 
-      />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 font-lato">
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative bg-[#FDFCFB] w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-        <div className="relative h-64">
-          <img src={activity.img} className="w-full h-full object-cover" alt={activity.title} />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCFB] via-transparent" />
+      <div className="relative bg-[#FDFCFB] w-full max-w-xl max-h-[90vh] flex flex-col rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
+        
+        {/* Header Image */}
+        <div className="relative h-60 shrink-0">
+          <img 
+            src={activity.img || "/api/placeholder/800/600"} 
+            className="w-full h-full object-cover" 
+            alt={activity.title} 
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           
           <button 
             onClick={onClose} 
-            className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-all"
+            className="absolute top-5 right-5 p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 transition-all z-10"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        <div className="p-10 space-y-8">
-          <div className="space-y-2">
-            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-emerald-600">
-              Expérience Immersive
-            </span>
-            <h2 className="text-4xl font-serif italic text-slate-900">
+        <div className="flex-1 overflow-y-auto p-8 md:p-10 space-y-8 no-scrollbar">
+          
+          {/* Title & Category */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="h-px w-6 bg-emerald-600" />
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-emerald-600">
+                Expérience Immersive
+              </span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-serif italic text-slate-900 tracking-tight leading-tight">
               {activity.title}
             </h2>
           </div>
 
-          <div className="flex gap-8 border-y border-slate-100 py-6">
+          {/* Key Information */}
+          <div className="grid grid-cols-2 gap-4 border-y border-slate-100 py-6">
             <div className="flex items-center gap-3">
-              <Clock className="text-emerald-600" size={18} />
-              <span className="text-sm font-medium text-slate-600">{activity.duration}</span>
+              <div className="bg-emerald-50 p-2 rounded-xl shrink-0">
+                <Clock className="text-emerald-700" size={18} strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="text-[8px] uppercase font-black text-slate-300 tracking-widest leading-none mb-1">Durée</p>
+                <p className="text-xs font-medium text-slate-700">{activity.duration}</p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
-              <Mountain className="text-emerald-600" size={18} />
-              <span className="text-sm font-medium text-slate-600">{activity.type}</span>
+              <div className="bg-emerald-50 p-2 rounded-xl shrink-0">
+                <Mountain className="text-emerald-700" size={18} strokeWidth={1.5} />
+              </div>
+              <div>
+                <p className="text-[8px] uppercase font-black text-slate-300 tracking-widest leading-none mb-1">Type</p>
+                <p className="text-xs font-medium text-slate-700">{activity.type}</p>
+              </div>
             </div>
           </div>
 
+          {/* Description & Inclusions */}
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-slate-800">
-              <ShieldCheck size={18} className="text-emerald-500" />
-              <p className="text-[11px] font-black uppercase tracking-widest">
-                Inclus : Guide certifié & équipement
-              </p>
+              <ShieldCheck size={16} className="text-emerald-500" strokeWidth={2.5} />
+              <p className="text-[9px] font-black uppercase tracking-[0.2em]">Inclus : Guide expert & matériel</p>
             </div>
-            <p className="text-slate-500 font-serif italic text-lg leading-relaxed">
-              "Une exploration profonde des paysages de Madagascar, conçue pour ceux qui cherchent à se reconnecter avec la nature sauvage."
+            <p className="text-slate-500 font-serif italic text-base md:text-lg leading-relaxed">
+              "{activity.description || "Une immersion profonde au cœur de la Grande Île, pensée pour ceux qui cherchent à s'évader."}"
             </p>
           </div>
+        </div>
 
+        {/*  Action button*/}
+        <div className="p-8 pt-0 shrink-0 bg-[#FDFCFB]">
           <button 
             onClick={handleConfirm}
             disabled={isAdded}
-            className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center justify-center gap-3
+            className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.25em] text-[9px] transition-all flex items-center justify-center gap-3 shadow-lg
               ${isAdded 
                 ? 'bg-emerald-600 text-white' 
-                : 'bg-slate-900 text-white hover:bg-emerald-800'
-              }`}
+                : 'bg-slate-900 text-white hover:bg-emerald-900 active:scale-95'}`}
           >
             {isAdded ? (
-              <><Check size={18} /> Ajouté au voyage</>
+              <><Check size={18} strokeWidth={3} /> Activité Planifiée</>
             ) : (
-              <><Plus size={18} /> Planifier cette activité</>
+              <><Plus size={18} strokeWidth={3} /> Ajouter à mon voyage</>
             )}
           </button>
         </div>
