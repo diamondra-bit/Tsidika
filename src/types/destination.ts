@@ -54,3 +54,13 @@ export interface Destination {
   restaurants?: Restaurant[];
   activites?: Activity[];
 }
+
+
+export interface RegionCardProps {
+  title: string;
+  image: string;
+  priceOrBudget: string;
+  stars?: number;
+  subtitle?: string;
+  type: 'hotel' | 'resto' | 'activity';
+}

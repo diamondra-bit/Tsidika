@@ -1,10 +1,5 @@
 "use client";
-
-interface SearchBarProps {
-  onSearch: (value: string) => void;
-  placeholder?: string; 
-  tag?: string;         
-}
+import { SearchBarProps } from "@/types/components";
 
 export default function SearchBar({ 
   onSearch, 

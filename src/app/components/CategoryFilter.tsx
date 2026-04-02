@@ -1,11 +1,5 @@
 "use client";
-
-interface CategoryFilterProps {
-  categories: string[];
-  activeCategory: string;
-  setActiveCategory: (category: string) => void;
-  title?: string; 
-}
+import { CategoryFilterProps } from "@/types/components";
 
 export default function CategoryFilter({categories, activeCategory, setActiveCategory, title = "Inspirations de voyage"} : CategoryFilterProps) {
   return (

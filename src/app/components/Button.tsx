@@ -1,11 +1,6 @@
-import { ReactNode } from 'react';
 
-interface ButtonProps {
-  children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline';
-  className?: string;
-  onClick?: () => void;
-}
+
+import { ButtonProps } from "@/types/components";
 
 export default function Button({ 
   children, 

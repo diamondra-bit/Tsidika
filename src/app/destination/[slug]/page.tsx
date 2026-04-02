@@ -5,17 +5,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { 
   Bed, Utensils, Camera, Info, 
-  MapPin, Calendar, Plane, ArrowRight 
+  MapPin, Plane, ArrowRight 
 } from 'lucide-react';
 import Navbar from '@/app/components/Navbar';
-import DestinationCard from '@/app/components/DestinationCard'; 
-import ActivityCard from '@/app/components/ActivityCard';
-import HotelModal from '@/app/components/HotelModal';
-import RestoModal from '@/app/components/RestoModal';
-import ActivityModal from '@/app/components/ActivityModal'; 
+import DestinationCard from '@/app/components/destination/DestinationCard'; 
+import ActivityCard from '@/app/components/destination/ActivityCard';
+import HotelModal from '@/app/components/destination/HotelModal';
+import RestoModal from '@/app/components/destination/RestoModal';
+import ActivityModal from '@/app/components/destination/ActivityModal'; 
 import { notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Destination } from '@/types/destination';
 
 export default function DestinationDetail({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = use(params);

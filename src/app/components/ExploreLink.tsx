@@ -1,10 +1,6 @@
 import Link from 'next/link';
 
-interface ExploreLinkProps {
-  href: string;
-  label?: string; 
-  className?: string;
-}
+import { ExploreLinkProps } from '@/types/components';
 
 const ExploreLink = ({ href, label = "Découvrir l'expérience", className = "" }: ExploreLinkProps) => {
   return (

@@ -1,14 +1,6 @@
 import Image from 'next/image';
 import { Star, Utensils, Bed, Timer } from 'lucide-react';
-
-interface RegionCardProps {
-  title: string;
-  image: string;
-  priceOrBudget: string;
-  stars?: number;
-  subtitle?: string;
-  type: 'hotel' | 'resto' | 'activity';
-}
+import { RegionCardProps } from '@/types/destination';
 
 export default function RegionCard({ title, image, priceOrBudget, stars, subtitle, type }: RegionCardProps) {
   return (
