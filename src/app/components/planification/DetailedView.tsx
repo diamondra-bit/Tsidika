@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Compass, Utensils, Moon, MapPin } from 'lucide-react';
-import { DailyPlan, DetailedViewProps, ScheduleRowProps } from '@/types/trip';
+import { DailyPlan, DetailedViewProps } from '@/types/trip';
 import { ScheduleRow } from './ScheduleRow';
 
 export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
@@ -13,8 +13,7 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
     const hotels = items.filter(item => item.type === 'hébergement');
     const activities = items.filter(item => item.type !== 'hébergement');
     
-    // Fallback: If no hotels are selected, chunk activities by 3
-    if (hotels.length === 0) {
+   if (hotels.length === 0) {
       const chunks: DailyPlan[] = [];
       for (let i = 0; i < activities.length; i += 3) {
         chunks.push({ 
@@ -26,7 +25,6 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
       return chunks;
     }
 
-    // Standard Logic: Map activities to each hotel (2 activities per day)
     return hotels.map((hotel, idx) => ({
       day: idx + 1,
       hotel,
@@ -37,31 +35,26 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
   const currentDay = days[activeDay] || { day: 1, hotel: null, activities: [] };
 
   return (
-    <div className="max-w-7xl mx-auto py-12 animate-in fade-in duration-700">
+    <div className="max-w-7xl mx-auto animate-in fade-in duration-700">
       
       {/* HEADER SECTION */}
-      <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8 border-b border-slate-100 pb-12">
-        <div>
-          <button 
-            onClick={onBack} 
-            className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-slate-900 transition-all mb-8"
-          >
-            <ChevronLeft size={14} /> Back to Summary
-          </button>
-          <h2 className="text-6xl font-serif italic text-slate-950 tracking-tighter">
-            Temporal <span className="text-slate-300">Itinerary</span>
-          </h2>
-        </div>
-        <div className="bg-slate-50 px-8 py-4 rounded-3xl border border-slate-100">
-          <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Total Budget</p>
-          <span className="text-2xl font-serif italic text-emerald-700">
-            {budget.toLocaleString()} Ar
-          </span>
-        </div>
-      </header>
+     <header className="mb-16 flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-12 gap-8">
+      
+      {/* Title*/}
+      <div className="flex flex-col items-start">
+        <button 
+          onClick={onBack} 
+          className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-slate-900 transition-all mb-4"
+        >
+          <ChevronLeft size={14} /> Retour au sommaire
+        </button>
+        <h2 className="text-6xl font-serif italic text-slate-950 tracking-tighter leading-none">
+          Itinéraire <span className="text-slate-400">Temporel</span>
+        </h2>
+      </div>
 
-      {/* DAY NAVIGATION CONTROL */}
-      <div className="flex items-center justify-center gap-12 mb-20">
+      {/* Navigation */}
+      <div className="flex items-center gap-6 md:gap-10">
         <button 
           onClick={() => setActiveDay(prev => Math.max(0, prev - 1))}
           disabled={activeDay === 0}
@@ -86,7 +79,7 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
               />
             ))}
           </div>
-          <h3 className="mt-6 text-4xl font-serif italic text-slate-950">Day {activeDay + 1}</h3>
+          <h3 className="mt-4 text-4xl font-serif italic text-slate-950 leading-none">Jour {activeDay + 1}</h3>
         </div>
 
         <button 
@@ -101,43 +94,19 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
           <ChevronRight size={20} />
         </button>
       </div>
+    </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-        
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">       
         {/* MAIN LAYOUT: Hotel + Activities */}
         <div className="lg:col-span-7 space-y-16 min-h-[600px]">
-          
-          {/* BASE CAMP DISPLAY (HOTEL) */}
-          {currentDay.hotel ? (
-            <div className="p-10 bg-slate-950 rounded-[3rem] text-white flex items-center justify-between group overflow-hidden relative shadow-2xl">
-              <div className="relative z-10 flex items-center gap-6">
-                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/10">
-                  <Moon className="text-emerald-400" size={24} />
-                </div>
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40 mb-1">Base Camp / Overnight</p>
-                  <h4 className="text-3xl font-serif italic">{currentDay.hotel.name || currentDay.hotel.title}</h4>
-                </div>
-              </div>
-              <img 
-                src={currentDay.hotel.img} 
-                className="absolute inset-0 w-full h-full object-cover opacity-20 scale-110 group-hover:scale-100 transition-transform duration-1000" 
-                alt="Hotel background" 
-              />
-            </div>
-          ) : (
-            <div className="p-10 border-2 border-dashed border-slate-100 rounded-[3rem] flex items-center justify-center">
-              <p className="text-slate-400 italic font-serif">No accommodation selected for this day</p>
-            </div>
-          )}
 
           {/* ACTIVITY ROWS */}
           <div className="space-y-24 pt-8">
             {currentDay.activities.map((item, idx) => (
               <ScheduleRow
                 key={item.id}
-                time={idx === 0 ? "09:00 AM" : "02:30 PM"}
-                title={item.name || item.title || "Untitled Activity"}
+                time={idx === 0 ? "09:00" : "14:30"}
+                title={item.name || item.title || "Activité sans titre"}
                 type={item.type}
                 img={item.img}
                 icon={idx === 0 ? <Compass size={18}/> : <Utensils size={18}/>}
@@ -154,15 +123,15 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
                   <div className="w-full h-full flex flex-col items-center justify-center text-white/20">
                       <MapPin size={60} strokeWidth={1} className="mb-4" />
                       <p className="text-[10px] font-black uppercase tracking-[0.5em]">
-                        Coordinate Tracking D-{activeDay + 1}
+                        Suivi des coordonnées J-{activeDay + 1}
                       </p>
                   </div>
                </div>
                
                <div className="absolute bottom-10 left-10 right-10 bg-white p-8 rounded-[2.5rem] shadow-xl">
-                  <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-2">Geographic Focus</p>
+                  <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-2">Focus Géographique</p>
                   <p className="text-xl font-serif italic text-slate-950">
-                    {currentDay.activities[0]?.name || "Free Exploration"}
+                    {currentDay.activities[0]?.name || "Exploration libre"}
                   </p>
                </div>
             </div>
@@ -173,4 +142,3 @@ export const DetailedView = ({ items, onBack, budget }: DetailedViewProps) => {
     </div>
   );
 };
-
