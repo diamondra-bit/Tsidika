@@ -60,3 +60,214 @@ UPDATE destinations
 SET description = 'Ancien repaire de pirates au XVIIe siècle, Sainte-Marie est une île-jardin où la nature règne en maître. Bordée de récifs coralliens intacts et de forêts de mangroves, elle devient chaque année le théâtre d''un spectacle majestueux : le ballet des baleines à bosse. Ici, le rythme de vie suit celui des marées, offrant une sérénité absolue loin du tumulte du monde moderne.',
     bon_plan = 'Ne vous contentez pas de la route principale. Louez un vélo et traversez l''île vers l''Est pour rejoindre la côte sauvage. Là, dégustez une langouste grillée les pieds dans le sable à la pointe d''Ampanihy, face à l''immensité de l''Océan Indien.'
 WHERE slug = 'sainte-marie';
+
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS price numeric(10,2) DEFAULT 0;
+
+UPDATE activites SET price = 45.00 WHERE title = 'Plongée à Nosy Tanikely';
+UPDATE activites SET price = 35.00 WHERE title = 'Safari Baleines';
+UPDATE activites SET price = 50.00 WHERE title = 'Tour de l''île en Quad';
+
+UPDATE activites SET price = 20.00 WHERE title = 'Randonnée Namaza';
+UPDATE activites SET price = 10.00 WHERE title = 'Coucher de soleil à la Fenêtre';
+UPDATE activites SET price = 12.00 WHERE title = 'Piscine Naturelle';
+
+UPDATE activites SET price = 40.00 WHERE title = 'Sortie Baleines';
+UPDATE activites SET price = 18.00 WHERE title = 'Pirogue à l''Île aux Nattes';
+UPDATE activites SET price = 15.00 WHERE title = 'Histoire des Pirates';
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS description text;
+
+UPDATE activites
+SET description = 'Explorez les fonds marins exceptionnels de la réserve de Nosy Tanikely, entre coraux, poissons tropicaux et eaux translucides.'
+WHERE title = 'Plongée à Nosy Tanikely';
+
+UPDATE activites
+SET description = 'Partez en mer à la rencontre des baleines dans leur habitat naturel, accompagné d’un guide local passionné.'
+WHERE title = 'Safari Baleines';
+
+UPDATE activites
+SET description = 'Traversez pistes, villages et panoramas côtiers lors d’une journée riche en sensations.'
+WHERE title = 'Tour de l''île en Quad';
+
+UPDATE activites
+SET description = 'Une randonnée emblématique au cœur de l’Isalo, entre canyon, faune endémique et oasis naturelle.'
+WHERE title = 'Randonnée Namaza';
+
+UPDATE activites
+SET description = 'Admirez les dernières lueurs du jour dans l’un des points de vue les plus iconiques de Madagascar.'
+WHERE title = 'Coucher de soleil à la Fenêtre';
+
+UPDATE activites
+SET description = 'Profitez d’une pause fraîcheur dans un cadre naturel spectaculaire après une marche accessible.'
+WHERE title = 'Piscine Naturelle';
+
+UPDATE activites
+SET description = 'Observez les majestueuses baleines à bosse au large de Sainte-Marie pendant la saison des migrations.'
+WHERE title = 'Sortie Baleines';
+
+UPDATE activites
+SET description = 'Une traversée douce en pirogue vers l’Île aux Nattes, idéale pour une immersion au rythme des lagons.'
+WHERE title = 'Pirogue à l''Île aux Nattes';
+
+UPDATE activites
+SET description = 'Revivez les légendes et l’histoire fascinante des pirates qui ont marqué Sainte-Marie.'
+WHERE title = 'Histoire des Pirates';
+
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS price numeric(10,2) DEFAULT 0;
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS description text;
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS preferred_moment text
+CHECK (preferred_moment IN ('morning', 'afternoon', 'evening', 'flex'));
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS category text;
+
+ALTER TABLE activites
+ADD COLUMN IF NOT EXISTS intensity text
+CHECK (intensity IN ('low', 'medium', 'high'));
+
+ALTER TABLE gastronomie
+ADD COLUMN IF NOT EXISTS meal_service text DEFAULT 'both'
+CHECK (meal_service IN ('lunch', 'dinner', 'both'));
+
+create table if not exists profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text,
+  full_name text,
+  created_at timestamptz default now()
+);
+
+create table if not exists itineraries (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  status text default 'draft',
+  total_budget numeric(10,2) default 0,
+  total_nights int default 0,
+  starts_on date,
+  ends_on date,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists itinerary_items (
+  id uuid primary key default gen_random_uuid(),
+  itinerary_id uuid not null references itineraries(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+
+  item_type text not null,
+  source_item_id bigint,
+  unique_key text not null,
+
+  destination_id bigint,
+  title text,
+  description text,
+  img text,
+
+  price numeric(10,2) default 0,
+  total_price numeric(10,2) default 0,
+
+  duration text,
+  preferred_moment text,
+  meal_service text,
+  category text,
+  intensity text,
+
+  check_in date,
+  check_out date,
+  nights int default 0,
+
+  raw_data jsonb default '{}'::jsonb,
+
+  created_at timestamptz default now()
+);
+
+create table if not exists itinerary_days (
+  id uuid primary key default gen_random_uuid(),
+  itinerary_id uuid not null references itineraries(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+
+  day_number int not null,
+  date_value date,
+  destination_id bigint,
+  hotel_title text,
+
+  slots jsonb not null default '[]'::jsonb,
+
+  created_at timestamptz default now()
+);
+alter table profiles enable row level security;
+alter table itineraries enable row level security;
+alter table itinerary_items enable row level security;
+alter table itinerary_days enable row level security;
+
+create policy "Users can view own profile"
+on profiles
+for select
+to authenticated
+using ((select auth.uid()) = id);
+
+create policy "Users can insert own profile"
+on profiles
+for insert
+to authenticated
+with check ((select auth.uid()) = id);
+
+create policy "Users can update own profile"
+on profiles
+for update
+to authenticated
+using ((select auth.uid()) = id)
+with check ((select auth.uid()) = id);
+
+create policy "Users can view own profile"
+on profiles
+for select
+to authenticated
+using ((select auth.uid()) = id);
+
+create policy "Users can insert own profile"
+on profiles
+for insert
+to authenticated
+with check ((select auth.uid()) = id);
+
+create policy "Users can update own profile"
+on profiles
+for update
+to authenticated
+using ((select auth.uid()) = id)
+with check ((select auth.uid()) = id);
+
+create policy "Users can view own itinerary items"
+on itinerary_items
+for select
+to authenticated
+using ((select auth.uid()) = user_id);
+
+create policy "Users can insert own itinerary items"
+on itinerary_items
+for insert
+to authenticated
+with check ((select auth.uid()) = user_id);
+
+create policy "Users can update own itinerary items"
+on itinerary_items
+for update
+to authenticated
+using ((select auth.uid()) = user_id)
+with check ((select auth.uid()) = user_id);
+
+create policy "Users can delete own itinerary items"
+on itinerary_items
+for delete
+to authenticated
+using ((select auth.uid()) = user_id);

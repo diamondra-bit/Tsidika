@@ -16,7 +16,7 @@ export default function Navbar() {
           <Link href="/" className="hover:text-emerald-600 transition-colors">Acceuil</Link>      
           <Link href="/destination" className="hover:text-emerald-600 transition-colors">Destinations</Link>
           <Link href="/planification" className="hover:text-emerald-600 transition-colors">Mon voyage</Link>
-          {/* <Link href="/tsidikbook" className="hover:text-emerald-600 transition-colors">Communauté </Link> */}
+          <Link href="/mes-itineraires" className="hover:text-emerald-600 transition-colors">Mes itinéraires </Link>
           </div>
 
         {/* Languages */}

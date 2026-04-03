@@ -5,23 +5,30 @@ import { X, Utensils, Star, Plus, Check } from 'lucide-react';
 import { useTrip } from '@/context/TripContext';
 
 export default function RestoModal({ resto, onClose }: any) {
-  const { addToTrip } = useTrip();
+  const { addToTrip, tripCart } = useTrip();
   const [isAdded, setIsAdded] = useState(false);
 
- const budgetMin = Number(resto.budget_min) || 0; 
+  const budgetMin = Number(resto.budget_min) || 0;
   const budgetMax = Number(resto.budget_max) || 0;
-  
- // Calculating a representative price for the basket
-  const averageBudget = budgetMin > 0 ? (budgetMin + budgetMax) / 2 : 0;
+  const averageBudget = budgetMin > 0 ? (budgetMin + budgetMax) / 2 : budgetMax;
+
+  const uniqueKey = `gastronomie-${resto.id}`;
+  const alreadyInCart = tripCart.some((item: any) => item.uniqueKey === uniqueKey);
 
   const handleConfirm = () => {
+    if (alreadyInCart) return;
+
     addToTrip({
       ...resto,
-      cartId: `resto-${resto.id}-${Date.now()}`, 
+      uniqueKey,
+      cartId: `resto-${resto.id}-${Date.now()}`,
+      destination_id: resto.destination_id,
       type: 'gastronomie',
-      totalPrice: averageBudget 
+      totalPrice: averageBudget,
+      img: resto.img,
+      meal_service: resto.meal_service || 'both'
     });
-    
+
     setIsAdded(true);
     setTimeout(onClose, 1200);
   };
@@ -29,20 +36,18 @@ export default function RestoModal({ resto, onClose }: any) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 font-lato">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
-      
+
       <div className="relative bg-[#FDFCFB] w-full max-w-2xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
-        
-        {/* Banner Image */}
         <div className="relative h-72 w-full">
-          <img 
-            src={resto.img || "/api/placeholder/800/600"} 
-            alt={resto.name} 
-            className="w-full h-full object-cover" 
+          <img
+            src={resto.img || "/api/placeholder/800/600"}
+            alt={resto.name}
+            className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FDFCFB] via-transparent to-black/20" />
-          
-          <button 
-            onClick={onClose} 
+
+          <button
+            onClick={onClose}
             className="absolute top-6 right-6 p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 transition-all"
           >
             <X size={18} />
@@ -50,7 +55,6 @@ export default function RestoModal({ resto, onClose }: any) {
         </div>
 
         <div className="p-10 space-y-10">
-          {/* Header & Budget */}
           <div className="flex flex-col md:flex-row justify-between items-start gap-6">
             <div className="space-y-3">
               <h2 className="text-5xl font-serif italic text-slate-900 leading-none tracking-tight">
@@ -58,25 +62,25 @@ export default function RestoModal({ resto, onClose }: any) {
               </h2>
               <div className="flex items-center gap-1 text-emerald-600">
                 {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    size={14} 
-                    fill={i < (Number(resto.stars) || 0) ? "currentColor" : "none"} 
+                  <Star
+                    key={i}
+                    size={14}
+                    fill={i < (Number(resto.stars) || 0) ? "currentColor" : "none"}
                     className={i < (Number(resto.stars) || 0) ? "text-emerald-500" : "text-slate-200"}
                   />
                 ))}
               </div>
             </div>
-            
+
             <div className="bg-slate-50 px-6 py-4 rounded-2xl border border-slate-100 min-w-[140px] text-center">
               <p className="text-2xl font-serif text-slate-900 leading-none">
                 {budgetMin}€<span className="text-slate-300 mx-1">—</span>{budgetMax}€
               </p>
               <p className="text-[9px] uppercase font-black text-slate-400 tracking-widest mt-2">Budget moyen</p>
+              <p className="text-xs text-emerald-600 mt-2 font-bold">Ajouté au budget : {averageBudget}€</p>
             </div>
           </div>
 
-          {/* Specialty Section */}
           <div className="relative group">
             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-orange-200 rounded-full" />
             <div className="space-y-3">
@@ -90,17 +94,16 @@ export default function RestoModal({ resto, onClose }: any) {
             </div>
           </div>
 
-          {/* Actions */}
           <div className="pt-4">
-            <button 
+            <button
               onClick={handleConfirm}
-              disabled={isAdded}
+              disabled={isAdded || alreadyInCart}
               className={`w-full py-6 rounded-[1.8rem] font-black uppercase tracking-[0.25em] text-[10px] transition-all flex items-center justify-center gap-3 shadow-xl
-                ${isAdded 
-                  ? 'bg-emerald-600 text-white translate-y-0' 
+                ${isAdded || alreadyInCart
+                  ? 'bg-emerald-600 text-white translate-y-0'
                   : 'bg-slate-900 text-white hover:bg-emerald-900 hover:-translate-y-1 active:scale-95'}`}
             >
-              {isAdded ? (
+              {isAdded || alreadyInCart ? (
                 <><Check size={20} strokeWidth={3} /> Expérience réservée</>
               ) : (
                 <><Plus size={20} strokeWidth={3} /> Ajouter à mon voyage</>

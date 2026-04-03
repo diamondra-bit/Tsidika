@@ -5,18 +5,31 @@ import { useState } from 'react';
 import { useTrip } from '@/context/TripContext';
 
 export default function ActivityModal({ activity, onClose }: any) {
-  const { addToTrip } = useTrip();
+  const { addToTrip, tripCart } = useTrip();
   const [isAdded, setIsAdded] = useState(false);
 
+  const activityPrice = Number(activity.price) || 0;
+  const uniqueKey = `découverte-${activity.id}`;
+  const alreadyInCart = tripCart.some((item: any) => item.uniqueKey === uniqueKey);
+
   const handleConfirm = () => {
-    addToTrip({ 
+    if (alreadyInCart) return;
+
+    addToTrip({
       ...activity,
+      uniqueKey,
       cartId: `activity-${activity.id}-${Date.now()}`,
+      destination_id: activity.destination_id,
       name: activity.title,
-      type: 'decouverte',
-      totalPrice: 0 
+      type: 'découverte',
+      totalPrice: activityPrice,
+      img: activity.img,
+      preferred_moment: activity.preferred_moment,
+      category: activity.category,
+      intensity: activity.intensity,
+      description: activity.description
     });
-    
+
     setIsAdded(true);
     setTimeout(onClose, 1200);
   };
@@ -24,20 +37,18 @@ export default function ActivityModal({ activity, onClose }: any) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 font-lato">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
-      
+
       <div className="relative bg-[#FDFCFB] w-full max-w-xl max-h-[90vh] flex flex-col rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
-        
-        {/* Header Image */}
         <div className="relative h-60 shrink-0">
-          <img 
-            src={activity.img || "/api/placeholder/800/600"} 
-            className="w-full h-full object-cover" 
-            alt={activity.title} 
+          <img
+            src={activity.img || "/api/placeholder/800/600"}
+            className="w-full h-full object-cover"
+            alt={activity.title}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          
-          <button 
-            onClick={onClose} 
+
+          <button
+            onClick={onClose}
             className="absolute top-5 right-5 p-2 bg-white/20 backdrop-blur-md rounded-full text-white hover:bg-white/40 transition-all z-10"
           >
             <X size={18} />
@@ -45,8 +56,6 @@ export default function ActivityModal({ activity, onClose }: any) {
         </div>
 
         <div className="flex-1 overflow-y-auto p-8 md:p-10 space-y-8 no-scrollbar">
-          
-          {/* Title & Category */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <span className="h-px w-6 bg-emerald-600" />
@@ -59,7 +68,6 @@ export default function ActivityModal({ activity, onClose }: any) {
             </h2>
           </div>
 
-          {/* Key Information */}
           <div className="grid grid-cols-2 gap-4 border-y border-slate-100 py-6">
             <div className="flex items-center gap-3">
               <div className="bg-emerald-50 p-2 rounded-xl shrink-0">
@@ -81,7 +89,11 @@ export default function ActivityModal({ activity, onClose }: any) {
             </div>
           </div>
 
-          {/* Description & Inclusions */}
+          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
+            <p className="text-[10px] uppercase font-black tracking-widest text-slate-400 mb-2">Prix</p>
+            <p className="text-2xl font-serif italic text-slate-900">{activityPrice}€</p>
+          </div>
+
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-slate-800">
               <ShieldCheck size={16} className="text-emerald-500" strokeWidth={2.5} />
@@ -93,17 +105,16 @@ export default function ActivityModal({ activity, onClose }: any) {
           </div>
         </div>
 
-        {/*  Action button*/}
         <div className="p-8 pt-0 shrink-0 bg-[#FDFCFB]">
-          <button 
+          <button
             onClick={handleConfirm}
-            disabled={isAdded}
+            disabled={isAdded || alreadyInCart}
             className={`w-full py-5 rounded-2xl font-black uppercase tracking-[0.25em] text-[9px] transition-all flex items-center justify-center gap-3 shadow-lg
-              ${isAdded 
-                ? 'bg-emerald-600 text-white' 
+              ${isAdded || alreadyInCart
+                ? 'bg-emerald-600 text-white'
                 : 'bg-slate-900 text-white hover:bg-emerald-900 active:scale-95'}`}
           >
-            {isAdded ? (
+            {isAdded || alreadyInCart ? (
               <><Check size={18} strokeWidth={3} /> Activité Planifiée</>
             ) : (
               <><Plus size={18} strokeWidth={3} /> Ajouter à mon voyage</>
