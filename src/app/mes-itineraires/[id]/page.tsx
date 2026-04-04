@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/app/components/Navbar';
 
@@ -25,7 +25,14 @@ interface ItineraryHeader {
   total_nights: number;
 }
 
-export default function ItineraryDetailPage({ params }: { params: { id: string } }) {
+export default function ItineraryDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const resolvedParams = use(params);
+  const itineraryId = resolvedParams.id;
+
   const [loading, setLoading] = useState(true);
   const [itinerary, setItinerary] = useState<ItineraryHeader | null>(null);
   const [days, setDays] = useState<ItineraryDay[]>([]);
@@ -34,7 +41,7 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
     async function fetchData() {
       try {
         const {
-          data: { user }
+          data: { user },
         } = await supabase.auth.getUser();
 
         if (!user) {
@@ -45,7 +52,8 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
         const { data: itineraryData, error: itineraryError } = await supabase
           .from('itineraries')
           .select('*')
-          .eq('id', params.id)
+          .eq('id', itineraryId)
+          .eq('user_id', user.id)
           .single();
 
         if (itineraryError) throw itineraryError;
@@ -53,7 +61,8 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
         const { data: daysData, error: daysError } = await supabase
           .from('itinerary_days')
           .select('*')
-          .eq('itinerary_id', params.id)
+          .eq('itinerary_id', itineraryId)
+          .eq('user_id', user.id)
           .order('day_number', { ascending: true });
 
         if (daysError) throw daysError;
@@ -62,13 +71,15 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
         setDays(daysData || []);
       } catch (error) {
         console.error('Erreur chargement détail itinéraire:', error);
+        setItinerary(null);
+        setDays([]);
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-  }, [params.id]);
+  }, [itineraryId]);
 
   return (
     <div className="bg-[#FDFCFB] min-h-screen font-lato">
@@ -86,13 +97,17 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
                 {itinerary.title}
               </h1>
               <p className="text-slate-500 font-light italic">
-                {Number(itinerary.total_budget || 0).toLocaleString()} € · {itinerary.total_nights || 0} nuit(s)
+                {Number(itinerary.total_budget || 0).toLocaleString()} € ·{' '}
+                {itinerary.total_nights || 0} nuit(s)
               </p>
             </div>
 
             <div className="space-y-12">
               {days.map((day) => (
-                <div key={day.id} className="bg-white rounded-[2rem] border border-slate-100 p-8">
+                <div
+                  key={day.id}
+                  className="bg-white rounded-[2rem] border border-slate-100 p-8"
+                >
                   <div className="mb-8">
                     <h2 className="text-3xl font-serif italic text-slate-950">
                       Jour {day.day_number}
@@ -111,12 +126,21 @@ export default function ItineraryDetailPage({ params }: { params: { id: string }
 
                   <div className="space-y-6">
                     {day.slots?.map((slot, idx) => (
-                      <div key={idx} className="flex items-start gap-6 border-b border-slate-50 pb-4">
-                        <div className="w-20 text-slate-900 font-serif italic">{slot.time}</div>
+                      <div
+                        key={idx}
+                        className="flex items-start gap-6 border-b border-slate-50 pb-4"
+                      >
+                        <div className="w-20 text-slate-900 font-serif italic">
+                          {slot.time}
+                        </div>
                         <div>
-                          <h3 className="text-lg text-slate-900">{slot.title}</h3>
+                          <h3 className="text-lg text-slate-900">
+                            {slot.title}
+                          </h3>
                           {slot.label && (
-                            <p className="text-sm text-slate-400 mt-1">{slot.label}</p>
+                            <p className="text-sm text-slate-400 mt-1">
+                              {slot.label}
+                            </p>
                           )}
                         </div>
                       </div>
