@@ -20,6 +20,7 @@ export default function PlanificationPage() {
 
   const [step, setStep] = useState<'summary' | 'detailed'>('summary');
   const [isDoneSelecting, setIsDoneSelecting] = useState(false);
+  const [resetSelectionKey, setResetSelectionKey] = useState(0);
 
   if (!isInitialized) return null;
 
@@ -38,6 +39,7 @@ export default function PlanificationPage() {
     clearTrip();
     setStep('summary');
     setIsDoneSelecting(false);
+    setResetSelectionKey((prev) => prev + 1);
   };
 
   return (
@@ -47,6 +49,7 @@ export default function PlanificationPage() {
         {!isDoneSelecting ? (
           <div className="mt-[72px]">
             <QuickStartForm
+              key={resetSelectionKey}
               onAdd={addToTrip}
               tripCart={tripCart}
               onFinish={() => setIsDoneSelecting(true)}

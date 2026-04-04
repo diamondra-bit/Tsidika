@@ -1,9 +1,9 @@
 import Navbar from "./components/Navbar"
-import Hero from "./Acceuil/Hero";
-import TopDestinations from "./Acceuil/TopDestinations";
-import LatestStories from "./Acceuil/LatestStories";
-import Newsletter from "./Acceuil/Newsletter";
-import Footer from "./Acceuil/Footer";
+import Hero from "./components/Acceuil/Hero";
+import TopDestinations from "./components/Acceuil/TopDestinations";
+import LatestStories from "./components/Acceuil/LatestStories";
+import Newsletter from "./components/Acceuil/Newsletter";
+import Footer from "./components/Acceuil/Footer";
 
 export default function Home() {
   return (

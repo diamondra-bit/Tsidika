@@ -271,3 +271,63 @@ on itinerary_items
 for delete
 to authenticated
 using ((select auth.uid()) = user_id);
+
+
+create table if not exists recits (
+  id bigserial primary key,
+  slug text unique not null,
+  title text not null,
+  excerpt text,
+  content text not null,
+  category text not null,
+  cover_image text not null,
+  featured boolean default false,
+  published boolean default true,
+  read_time integer default 5,
+  created_at timestamptz default now()
+);
+
+insert into recits (slug, title, excerpt, content, category, cover_image, featured, read_time)
+values
+(
+  'guide-tsingy-bemaraha',
+  'Guide ultime : Traverser les Tsingy de Bemaraha sans encombre',
+  'Préparez votre aventure dans les Tsingy avec les bons réflexes, les meilleurs horaires et les points de vigilance.',
+  'Les Tsingy de Bemaraha offrent une expérience unique à Madagascar. Pour réussir votre visite, il est conseillé de partir tôt le matin, de prévoir de bonnes chaussures, de l’eau en quantité et un guide local. La traversée des ponts suspendus et des formations calcaires demande un minimum de prudence, mais l’expérience est spectaculaire. Pensez aussi à réserver votre hébergement à l’avance si vous voyagez en haute saison.',
+  'Aventure',
+  '/TopDestination/tsingy.jpg',
+  true,
+  8
+),
+(
+  'art-zafimaniry',
+  'L''art du Zafimaniry : un patrimoine mondial',
+  'Plongez dans l’histoire fascinante de ce peuple sculpteur des Hautes Terres.',
+  'Le savoir-faire des Zafimaniry est reconnu pour la finesse de ses sculptures sur bois et son importance culturelle. Dans les Hautes Terres, plusieurs villages permettent de découvrir ce patrimoine vivant. Une visite accompagnée permet de mieux comprendre la transmission des motifs et le rôle de l’artisanat dans la vie quotidienne locale.',
+  'Culture',
+  '/TopDestination/ambohimanga.jpg',
+  false,
+  6
+),
+(
+  'saveurs-antsirabe',
+  'Top 5 des saveurs à goûter à Antsirabe',
+  'Du riz rouge au Vary amin''anana, découvrez les délices de la Ville d''Eau.',
+  'Antsirabe est une destination idéale pour découvrir une cuisine chaleureuse et ancrée dans les produits locaux. Entre les marchés colorés, les plats traditionnels et les spécialités préparées en famille, la ville offre une belle introduction à la gastronomie des Hautes Terres. Prenez le temps de goûter les recettes locales dans de petites adresses authentiques.',
+  'Gastronomie',
+  '/TopDestination/antsirabe.jpg',
+  false,
+  5
+),
+(
+  'indri-indri-andasibe',
+  'À la rencontre de l''Indri-Indri à Andasibe',
+  'Écoutez le chant mystique du plus grand lémurien de Madagascar en forêt vierge.',
+  'Andasibe est l’un des meilleurs endroits pour observer l’Indri-Indri. Une sortie au lever du jour permet de profiter au mieux des sons de la forêt et d’augmenter les chances d’observation. Le parc offre aussi une biodiversité remarquable, avec caméléons, oiseaux endémiques et végétation luxuriante.',
+  'Faune & Flore',
+  '/TopDestination/lemurien1.jpg',
+  false,
+  7
+);
+
+
