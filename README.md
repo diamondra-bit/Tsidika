@@ -1,36 +1,12 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🌀 Tsidika — Madagascar Travel Planner is a modern web application designed to make trip planning to Madagascar effortless and inspiring. It allows users to explore iconic destinations, hand-pick their favorite hotels and activities, and automatically generate a organized itinerary.
 
-## Getting Started
+ Key Features
+- Top Spots (Destinations): These are the main "hubs" of your trip (e.g., Nosy Be or Isalo). Each spot includes its own unique tag, like "Crystal Water" or "Adventure."
 
-First, run the development server:
+- Local Accommodations: Once you pick a destination, the app shows you the specific Hotels and Lodgings available right there. You can see prices and photos for each.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Local Flavors & Fun: We also suggest Restaurants (Gastronomy) and Activities (Discovery) that are physically located in that specific area.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Quick-Add System: A "QuickStart" feature that lets users build their trip by adding items to a cart without losing their place while browsing.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Smart Trip Manager: An automatic calculation system that tracks the total budget, the number of nights stayed, and manages travel dates in real-time.
