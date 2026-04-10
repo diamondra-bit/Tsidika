@@ -47,8 +47,11 @@ export default function TopDestinations() {
   }, []);
 
   const filteredDestinations = useMemo(() => {
-    if (filter === 'all') return destinations;
-    return destinations.filter((dest) => dest.zone === filter);
+    const list = filter === 'all' 
+      ? destinations 
+      : destinations.filter((dest) => dest.zone === filter);
+      
+    return list.slice(0, 5);
   }, [destinations, filter]);
 
   const categories: { id: FilterType; label: string }[] = [
